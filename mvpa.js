@@ -30,7 +30,7 @@ ReadFileByLine(
     'fakereal.txt',
     line => result = [...result, parseInt(line)], 
     () => {
-        const start = new Date()
+        const start = process.hrtime()
         const total = result
             .map(heart_rate => heart_rate > mvpa_threshold ? 1 : 0)
             .reduce(
@@ -38,7 +38,7 @@ ReadFileByLine(
                 [0]
             )
             .reduce((acc, current) => current >= mvpa_minimum_period? acc + current : acc, 0)
-        const end = new Date()
+        const ellapsed = process.hrtime(start)
 
-        console.log(`Result: [${total}], with ellapsed time ${end - start} ms`)
+        console.log(`Result: [${total}], with ellapsed time ${ellapsed[0]} s ${ellapsed[1] / 1000000} ms`)
     })
