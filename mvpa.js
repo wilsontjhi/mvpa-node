@@ -8,6 +8,20 @@ function ReadFileByLine(file, lineCallback=(line) => {}, closeCallback=() => {})
         .on('close', closeCallback)
 }
 
+const AccumulateImmutable = (acc, current) => current == 0 ? [...acc, 0] : [...acc.slice(0, -1), acc[acc.length -1] + 1]
+const AccumulateMutable = (acc, current) => {
+    if(current == 0)
+    {
+        acc.push(0)
+        return acc
+    }
+    else
+    {
+        acc[acc.length - 1]++
+        return acc
+    }
+}
+
 const mvpa_threshold = 118
 const mvpa_minimum_period = 10
 
@@ -20,7 +34,7 @@ ReadFileByLine(
         const total = result
             .map(heart_rate => heart_rate > mvpa_threshold ? 1 : 0)
             .reduce(
-                (acc, current) => current == 0 ? [...acc, 0] : [...acc.slice(0, -1), acc[acc.length -1] + 1],
+                AccumulateMutable,
                 [0]
             )
             .reduce((acc, current) => current >= mvpa_minimum_period? acc + current : acc, 0)
