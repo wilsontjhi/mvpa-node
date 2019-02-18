@@ -27,16 +27,13 @@ const mvpa_minimum_period = 10
 
 let result = []
 ReadFileByLine(
-    'fakereal.txt',
+    'mock_heart_rate.txt',
     line => result = [...result, parseInt(line)], 
     () => {
         const start = process.hrtime()
         const total = result
             .map(heart_rate => heart_rate > mvpa_threshold ? 1 : 0)
-            .reduce(
-                AccumulateMutable,
-                [0]
-            )
+            .reduce(AccumulateMutable,[0])
             .reduce((acc, current) => current >= mvpa_minimum_period? acc + current : acc, 0)
         const ellapsed = process.hrtime(start)
 
